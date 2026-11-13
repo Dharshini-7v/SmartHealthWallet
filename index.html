@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartSlip – Your Personal Health Companion</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💊</text></svg>" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     AUTH PAGE
+     ============================================================ -->
+<div class="auth-page" id="authPage">
+
+  <!-- Left Panel -->
+  <div class="auth-left">
+    <div class="auth-brand">
+      <div class="brand-logo">💊</div>
+      <h1>Smart<span>Slip</span></h1>
+      <p>Your secure, centralized digital health platform. Store, manage, and access your complete medical history anytime, anywhere.</p>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="feat-icon" style="background:#dbeafe;">📋</div>
+          <div class="feat-text">
+            <h4>Health Records & Reports</h4>
+            <p>Upload PDFs, lab reports, prescriptions securely</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feat-icon" style="background:#d1fae5;">📱</div>
+          <div class="feat-text">
+            <h4>QR Health Card</h4>
+            <p>Encode your personal data & medications in a QR code</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feat-icon" style="background:#ede9fe;">🎙️</div>
+          <div class="feat-text">
+            <h4>AI Voice Assistant</h4>
+            <p>Ask anything about your health data hands-free</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feat-icon" style="background:#fef3c7;">⏰</div>
+          <div class="feat-text">
+            <h4>Medicine Reminders</h4>
+            <p>Never miss a dose with smart notifications</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feat-icon" style="background:#fee2e2;">🚨</div>
+          <div class="feat-text">
+            <h4>Emergency Access</h4>
+            <p>Critical info instantly available in emergencies</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <h2 id="authHeading">Welcome back</h2>
+        <p id="authSubheading">Sign in to your SmartSlip account</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-control" id="loginEmail" placeholder="your@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required />
+            <button type="button" class="input-toggle" onclick="togglePassword('loginPassword',this)">👁️</button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:20px;">
+          <a href="#" style="font-size:0.83rem;color:#2563eb;font-weight:600;text-decoration:none;">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary w-full btn-lg">
+          <span>🚀</span> Sign In
+        </button>
+        <div class="auth-divider">or continue with</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <button type="button" class="btn btn-ghost w-full" onclick="demoLogin()">
+            <span>⚡</span> Demo Account
+          </button>
+          <button type="button" class="btn btn-ghost w-full">
+            <span>🔵</span> Google
+          </button>
+        </div>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" id="regFirstName" placeholder="John" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="regLastName" placeholder="Doe" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-control" id="regEmail" placeholder="your@email.com" required />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" id="regDob" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gender</label>
+            <select class="form-control" id="regGender">
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Blood Type</label>
+          <div class="blood-grid" id="bloodGrid">
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'A+')">A+</button>
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'A-')">A-</button>
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'B+')">B+</button>
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'B-')">B-</button>
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'AB+')">AB+</button>
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'AB-')">AB-</button>
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'O+')">O+</button>
+            <button type="button" class="blood-btn" onclick="selectBlood(this,'O-')">O-</button>
+          </div>
+          <input type="hidden" id="regBlood" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">📱</span>
+            <input type="tel" class="form-control" id="regPhone" placeholder="+1 234 567 8900" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-icon-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-control" id="regPassword" placeholder="Create a strong password" required oninput="checkStrength(this.value)" />
+            <button type="button" class="input-toggle" onclick="togglePassword('regPassword',this)">👁️</button>
+          </div>
+          <div class="strength-meter">
+            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+            <span class="strength-text" id="strengthText"></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-full btn-lg" style="margin-top:8px;">
+          <span>✨</span> Create My Account
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP (shown after login)
+     ============================================================ -->
+<div class="app-layout hidden" id="appLayout">
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">💊</div>
+      <div>
+        <div class="brand-name">Smart<span>Slip</span></div>
+        <div style="color:rgba(255,255,255,0.3);font-size:0.68rem;">Health Platform</div>
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebarAvatar">JD</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarName">John Doe</div>
+        <div class="sidebar-user-role">Patient</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <a class="nav-item active" onclick="showPage('dashboard')" href="#">
+        <span class="nav-icon">🏠</span> Dashboard
+      </a>
+      <a class="nav-item" onclick="showPage('profile')" href="#">
+        <span class="nav-icon">👤</span> My Profile
+      </a>
+
+      <div class="nav-section-label">Health</div>
+      <a class="nav-item" onclick="showPage('records')" href="#">
+        <span class="nav-icon">📁</span> Health Records
+      </a>
+      <a class="nav-item" onclick="showPage('prescriptions')" href="#">
+        <span class="nav-icon">💊</span> Prescriptions
+      </a>
+      <a class="nav-item" onclick="showPage('reports')" href="#">
+        <span class="nav-icon">🧪</span> Lab Reports
+      </a>
+      <a class="nav-item" onclick="showPage('vitals')" href="#">
+        <span class="nav-icon">❤️</span> Vitals Monitor
+      </a>
+
+      <div class="nav-section-label">Management</div>
+      <a class="nav-item" onclick="showPage('appointments')" href="#">
+        <span class="nav-icon">📅</span> Appointments
+      </a>
+      <a class="nav-item" onclick="showPage('reminders')" href="#">
+        <span class="nav-icon">⏰</span> Med Reminders
+        <span class="nav-badge" id="reminderBadge">3</span>
+      </a>
+      <a class="nav-item" onclick="showPage('emergency')" href="#">
+        <span class="nav-icon">🚨</span> Emergency Contacts
+      </a>
+
+      <div class="nav-section-label">Tools</div>
+      <a class="nav-item" onclick="showPage('qrcode')" href="#">
+        <span class="nav-icon">📲</span> QR Health Card
+      </a>
+      <a class="nav-item" onclick="showPage('scanner')" href="#">
+        <span class="nav-icon">🔍</span> QR Scanner
+      </a>
+      <a class="nav-item" onclick="showPage('assistant')" href="#">
+        <span class="nav-icon">🎙️</span> AI Assistant
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a class="nav-item" onclick="showPage('settings')" href="#">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+      <a class="nav-item" onclick="handleLogout()" href="#">
+        <span class="nav-icon">🚪</span> Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="main-area">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-search">
+        <span>🔍</span>
+        <input type="text" placeholder="Search records, meds..." id="globalSearch" oninput="handleSearch(this.value)" />
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn" onclick="showPage('reminders')" title="Reminders">
+          ⏰<span class="notif-dot"></span>
+        </button>
+        <button class="topbar-btn" onclick="showPage('emergency')" title="Emergency">🚨</button>
+        <button class="topbar-btn" onclick="showPage('qrcode')" title="QR Card">📲</button>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="page-content">
+
+      <!-- ===== DASHBOARD ===== -->
+      <section class="page-section active" id="page-dashboard">
+        <div class="section-header" style="margin-bottom:24px;">
+          <div>
+            <h2 style="font-size:1.5rem;font-weight:800;" id="welcomeMsg">Good morning, John 👋</h2>
+            <p style="color:var(--text-muted);font-size:0.88rem;" id="dashDate">Loading date...</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="showPage('qrcode')">
+            📲 My QR Card
+          </button>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="grid-4 mb-2" style="margin-bottom:24px;">
+          <div class="stat-card stat-blue">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+              <div class="stat-label">Health Records</div>
+              <div class="stat-value" id="statRecords">0</div>
+              <div class="stat-change up">↑ All stored</div>
+            </div>
+          </div>
+          <div class="stat-card stat-green">
+            <div class="stat-icon">💊</div>
+            <div class="stat-info">
+              <div class="stat-label">Active Medications</div>
+              <div class="stat-value" id="statMeds">0</div>
+              <div class="stat-change up">↑ On track</div>
+            </div>
+          </div>
+          <div class="stat-card stat-orange">
+            <div class="stat-icon">📅</div>
+            <div class="stat-info">
+              <div class="stat-label">Upcoming Appts</div>
+              <div class="stat-value" id="statAppts">0</div>
+              <div class="stat-change">This month</div>
+            </div>
+          </div>
+          <div class="stat-card stat-purple">
+            <div class="stat-icon">⏰</div>
+            <div class="stat-info">
+              <div class="stat-label">Reminders Today</div>
+              <div class="stat-value" id="statReminders">0</div>
+              <div class="stat-change">Pending</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚡ Quick Actions</div>
+            </div>
+            <div class="card-body">
+              <div class="quick-actions">
+                <div class="quick-action" onclick="openUploadModal()">
+                  <div class="qa-icon" style="background:#dbeafe;">📄</div>
+                  <span>Upload Report</span>
+                </div>
+                <div class="quick-action" onclick="openAddPrescription()">
+                  <div class="qa-icon" style="background:#d1fae5;">💊</div>
+                  <span>Add Prescription</span>
+                </div>
+                <div class="quick-action" onclick="openAddAppointment()">
+                  <div class="qa-icon" style="background:#fef3c7;">📅</div>
+                  <span>Book Appointment</span>
+                </div>
+                <div class="quick-action" onclick="openAddReminder()">
+                  <div class="qa-icon" style="background:#ede9fe;">⏰</div>
+                  <span>Set Reminder</span>
+                </div>
+                <div class="quick-action" onclick="showPage('qrcode')">
+                  <div class="qa-icon" style="background:#ecfdf5;">📲</div>
+                  <span>QR Card</span>
+                </div>
+                <div class="quick-action" onclick="toggleVoice()">
+                  <div class="qa-icon" style="background:#fff7ed;">🎙️</div>
+                  <span>Voice Assistant</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Today's Meds -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">💊 Today's Medications</div>
+              <button class="btn btn-primary btn-sm" onclick="showPage('reminders')">View All</button>
+            </div>
+            <div class="card-body" style="padding:12px 24px;">
+              <div id="dashReminders">
+                <div class="empty-state" style="padding:20px;">
+                  <div class="empty-icon">💊</div>
+                  <p>No medications added yet</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+          <!-- Upcoming Appointments -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📅 Upcoming Appointments</div>
+              <button class="btn btn-primary btn-sm" onclick="showPage('appointments')">View All</button>
+            </div>
+            <div class="card-body" id="dashAppointments">
+              <div class="empty-state" style="padding:20px;">
+                <div class="empty-icon">📅</div>
+                <p>No appointments scheduled</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Records -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📁 Recent Records</div>
+              <button class="btn btn-primary btn-sm" onclick="showPage('records')">View All</button>
+            </div>
+            <div class="card-body" id="dashRecords">
+              <div class="empty-state" style="padding:20px;">
+                <div class="empty-icon">📁</div>
+                <p>No records uploaded yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vitals Overview -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">❤️ Health Vitals</div>
+            <button class="btn btn-primary btn-sm" onclick="showPage('vitals')">Update Vitals</button>
+          </div>
+          <div class="card-body">
+            <div class="vitals-grid" id="dashVitals">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROFILE ===== -->
+      <section class="page-section" id="page-profile">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#dbeafe;">👤</span> My Profile</div>
+          <button class="btn btn-primary btn-sm" onclick="openEditProfile()">✏️ Edit Profile</button>
+        </div>
+        <div class="card">
+          <div class="profile-banner">
+            <div class="profile-avatar-wrap">
+              <div class="profile-avatar" id="profileAvatarBig">JD</div>
+            </div>
+            <h2 id="profileName">John Doe</h2>
+            <p id="profileEmail">john@example.com</p>
+            <div class="profile-tags" id="profileTags"></div>
+          </div>
+          <div class="profile-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" id="profileInfo"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== HEALTH RECORDS ===== -->
+      <section class="page-section" id="page-records">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#fee2e2;">📁</span> Health Records</div>
+          <button class="btn btn-primary" onclick="openUploadModal()">+ Upload Record</button>
+        </div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-body">
+            <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="handleDragLeave(event)">
+              <div class="upload-icon">📂</div>
+              <p><span>Click to upload</span> or drag & drop files here</p>
+              <p style="font-size:0.8rem;margin-top:4px;color:var(--text-muted);">Supports PDF, JPG, PNG, DOCX — Max 20MB</p>
+              <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="handleFileSelect(this.files)" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm active" onclick="filterRecords('all',this)">All</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterRecords('report',this)">📊 Reports</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterRecords('prescription',this)">💊 Prescriptions</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterRecords('lab',this)">🧪 Lab Tests</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterRecords('xray',this)">🩻 X-Rays</button>
+          <button class="btn btn-ghost btn-sm" onclick="filterRecords('other',this)">📎 Other</button>
+        </div>
+
+        <div id="recordsList"></div>
+      </section>
+
+      <!-- ===== PRESCRIPTIONS ===== -->
+      <section class="page-section" id="page-prescriptions">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#d1fae5;">💊</span> Prescriptions</div>
+          <button class="btn btn-primary" onclick="openAddPrescription()">+ Add Prescription</button>
+        </div>
+        <div id="prescriptionsList"></div>
+      </section>
+
+      <!-- ===== LAB REPORTS ===== -->
+      <section class="page-section" id="page-reports">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#fef3c7;">🧪</span> Lab Reports</div>
+          <button class="btn btn-primary" onclick="openUploadModal('lab')">+ Add Lab Report</button>
+        </div>
+        <div id="labReportsList"></div>
+      </section>
+
+      <!-- ===== VITALS ===== -->
+      <section class="page-section" id="page-vitals">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#fee2e2;">❤️</span> Vitals Monitor</div>
+          <button class="btn btn-primary" onclick="openUpdateVitals()">+ Update Vitals</button>
+        </div>
+        <div class="vitals-grid" style="margin-bottom:24px;" id="vitalsDisplay"></div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 Vitals History</div></div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Blood Pressure</th>
+                    <th>Heart Rate</th>
+                    <th>Temperature</th>
+                    <th>SpO2</th>
+                    <th>Blood Sugar</th>
+                    <th>Weight</th>
+                  </tr>
+                </thead>
+                <tbody id="vitalsHistoryTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== APPOINTMENTS ===== -->
+      <section class="page-section" id="page-appointments">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#fef3c7;">📅</span> Appointments</div>
+          <button class="btn btn-primary" onclick="openAddAppointment()">+ Book Appointment</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">📅 Upcoming</div></div>
+            <div class="card-body" id="upcomingAppts"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">✅ Past Appointments</div></div>
+            <div class="card-body" id="pastAppts"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== REMINDERS ===== -->
+      <section class="page-section" id="page-reminders">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#ede9fe;">⏰</span> Medicine Reminders</div>
+          <button class="btn btn-primary" onclick="openAddReminder()">+ Add Reminder</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Today's Schedule</div></div>
+            <div class="card-body" id="todayReminders" style="padding:12px 24px;"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">All Medications</div></div>
+            <div class="card-body" id="allReminders" style="padding:12px 24px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== EMERGENCY CONTACTS ===== -->
+      <section class="page-section" id="page-emergency">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#fee2e2;">🚨</span> Emergency Contacts</div>
+          <button class="btn btn-danger" onclick="openAddEmergency()">+ Add Contact</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div>
+            <h3 style="font-size:0.9rem;font-weight:700;color:var(--text-secondary);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em;">Emergency Contacts</h3>
+            <div id="emergencyList"></div>
+          </div>
+          <div>
+            <h3 style="font-size:0.9rem;font-weight:700;color:var(--text-secondary);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em;">Medical Info Card</h3>
+            <div class="card" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border:none;">
+              <div class="card-body" style="color:white;">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+                  <div style="font-size:2rem;">💊</div>
+                  <div>
+                    <div style="font-size:1.2rem;font-weight:800;" id="emergCardName">-</div>
+                    <div style="opacity:0.6;font-size:0.82rem;">SmartSlip Health Card</div>
+                  </div>
+                </div>
+                <div style="display:grid;gap:10px;">
+                  <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:12px;">
+                    <div style="font-size:0.72rem;opacity:0.6;margin-bottom:4px;">BLOOD TYPE</div>
+                    <div style="font-size:1.3rem;font-weight:800;" id="emergCardBlood">-</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:12px;">
+                    <div style="font-size:0.72rem;opacity:0.6;margin-bottom:4px;">ALLERGIES</div>
+                    <div style="font-size:0.9rem;font-weight:600;" id="emergCardAllergies">None listed</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:12px;">
+                    <div style="font-size:0.72rem;opacity:0.6;margin-bottom:4px;">CURRENT MEDICATIONS</div>
+                    <div style="font-size:0.88rem;" id="emergCardMeds">None listed</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:12px;">
+                    <div style="font-size:0.72rem;opacity:0.6;margin-bottom:4px;">CONDITIONS</div>
+                    <div style="font-size:0.88rem;" id="emergCardConditions">None listed</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== QR CODE ===== -->
+      <section class="page-section" id="page-qrcode">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#ecfdf5;">📲</span> QR Health Card</div>
+        </div>
+        <div class="qr-container">
+          <div class="qr-preview">
+            <div class="qr-frame">
+              <div id="qrcode" style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;"></div>
+            </div>
+            <div class="qr-label">📲 Scan for Medical Info</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+              <button class="btn btn-primary btn-sm" onclick="downloadQR()">⬇️ Download</button>
+              <button class="btn btn-ghost btn-sm" onclick="printQR()">🖨️ Print</button>
+            </div>
+          </div>
+          <div class="qr-info" style="flex:1;">
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-header"><div class="card-title">📋 Encoded Information</div></div>
+              <div class="card-body">
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">This QR code encodes your critical medical information. When scanned, it shows your personal details and current medications.</p>
+                <div id="qrDataPreview" style="background:#f8fafc;border-radius:12px;padding:16px;font-size:0.82rem;"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">🔧 Customize QR Data</div></div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label class="form-label">Include in QR Code</label>
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.88rem;">
+                      <input type="checkbox" id="qrIncludeName" checked onchange="generateQR()" /> Personal Info (Name, DOB, Blood Type)
+                    </label>
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.88rem;">
+                      <input type="checkbox" id="qrIncludeMeds" checked onchange="generateQR()" /> Current Medications
+                    </label>
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.88rem;">
+                      <input type="checkbox" id="qrIncludeAllergies" checked onchange="generateQR()" /> Allergies
+                    </label>
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.88rem;">
+                      <input type="checkbox" id="qrIncludeEmergency" checked onchange="generateQR()" /> Emergency Contact
+                    </label>
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.88rem;">
+                      <input type="checkbox" id="qrIncludeConditions" checked onchange="generateQR()" /> Medical Conditions
+                    </label>
+                  </div>
+                </div>
+                <button class="btn btn-primary w-full" onclick="generateQR()">🔄 Regenerate QR Code</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== QR SCANNER ===== -->
+      <section class="page-section" id="page-scanner">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#dbeafe;">🔍</span> QR Code Scanner</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">📷 Camera Scanner</div></div>
+            <div class="card-body" style="text-align:center;">
+              <div id="scannerContainer" style="position:relative;border-radius:16px;overflow:hidden;background:#0f172a;min-height:300px;display:flex;align-items:center;justify-content:center;">
+                <div id="scannerPlaceholder" style="color:rgba(255,255,255,0.4);text-align:center;">
+                  <div style="font-size:4rem;margin-bottom:12px;">📷</div>
+                  <p>Camera feed will appear here</p>
+                </div>
+                <video id="scannerVideo" style="width:100%;border-radius:16px;display:none;" playsinline></video>
+                <canvas id="scannerCanvas" style="display:none;"></canvas>
+                <!-- Scanner crosshair -->
+                <div id="scannerOverlay" style="position:absolute;inset:0;display:none;">
+                  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border:3px solid #2563eb;border-radius:16px;">
+                    <div style="position:absolute;top:-3px;left:-3px;width:30px;height:30px;border-top:4px solid #10b981;border-left:4px solid #10b981;border-radius:4px 0 0 0;"></div>
+                    <div style="position:absolute;top:-3px;right:-3px;width:30px;height:30px;border-top:4px solid #10b981;border-right:4px solid #10b981;border-radius:0 4px 0 0;"></div>
+                    <div style="position:absolute;bottom:-3px;left:-3px;width:30px;height:30px;border-bottom:4px solid #10b981;border-left:4px solid #10b981;border-radius:0 0 0 4px;"></div>
+                    <div style="position:absolute;bottom:-3px;right:-3px;width:30px;height:30px;border-bottom:4px solid #10b981;border-right:4px solid #10b981;border-radius:0 0 4px 0;"></div>
+                    <div style="position:absolute;top:50%;left:0;right:0;height:2px;background:rgba(37,99,235,0.6);transform:translateY(-50%);animation:scanLine 2s linear infinite;"></div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="startScanner()" id="startScanBtn">▶ Start Camera</button>
+                <button class="btn btn-ghost" onclick="stopScanner()" id="stopScanBtn" style="display:none;">⏹ Stop</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('qrFileInput').click()">📂 Scan from File</button>
+              </div>
+              <input type="file" id="qrFileInput" class="hidden" accept="image/*" onchange="scanFromFile(this)" />
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">📋 Scan Results</div></div>
+            <div class="card-body" id="scanResults">
+              <div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>No QR code scanned yet</h3>
+                <p>Start the camera or upload an image to scan a SmartSlip QR code</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <style>
+          @keyframes scanLine {
+            0% { top: 10%; }
+            50% { top: 90%; }
+            100% { top: 10%; }
+          }
+        </style>
+      </section>
+
+      <!-- ===== AI ASSISTANT ===== -->
+      <section class="page-section" id="page-assistant">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#ede9fe;">🎙️</span> AI Health Assistant</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;">
+          <!-- Chat Area -->
+          <div class="card" style="display:flex;flex-direction:column;height:600px;">
+            <div class="card-header">
+              <div class="card-title">💬 SmartSlip Assistant</div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#10b981;animation:pulse 2s infinite;"></div>
+                <span style="font-size:0.8rem;color:var(--secondary);font-weight:600;">Online</span>
+              </div>
+            </div>
+            <div id="chatMessages" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;"></div>
+            <div style="padding:16px;border-top:1px solid var(--border);">
+              <div style="display:flex;gap:10px;">
+                <input type="text" class="form-control" id="chatInput" placeholder="Ask about your health records, medications..." onkeydown="if(event.key==='Enter')sendChatMessage()" style="border-radius:var(--radius-full);" />
+                <button class="btn btn-primary btn-icon" onclick="sendChatMessage()" style="border-radius:50%;width:44px;height:44px;padding:0;flex-shrink:0;">➤</button>
+                <button class="btn btn-ghost btn-icon" onclick="toggleVoiceChat()" id="voiceChatBtn" style="border-radius:50%;width:44px;height:44px;padding:0;flex-shrink:0;">🎙️</button>
+              </div>
+            </div>
+          </div>
+          <!-- Quick Questions -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">💡 Quick Questions</div></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('What medications am I currently taking?')">💊 My current medications?</button>
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('When is my next appointment?')">📅 Next appointment?</button>
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('What is my blood type?')">🩸 My blood type?</button>
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('Show my recent vitals')">❤️ Recent vitals?</button>
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('Who are my emergency contacts?')">🚨 Emergency contacts?</button>
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('Do I have any allergies?')">⚠️ My allergies?</button>
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('Show my health records')">📁 My health records?</button>
+              <button class="btn btn-ghost w-full" style="text-align:left;justify-content:flex-start;" onclick="askQuestion('What medicines do I take today?')">⏰ Today\'s medicines?</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS ===== -->
+      <section class="page-section" id="page-settings">
+        <div class="section-header">
+          <div class="section-title"><span class="icon-bg" style="background:#f1f5f9;">⚙️</span> Settings</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">🔔 Notifications</div></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:14px;" id="settingsNotif">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">🎨 Appearance</div></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Theme</label>
+                <select class="form-control" onchange="changeTheme(this.value)">
+                  <option value="light">Light</option>
+                  <option value="dark">Dark (Coming Soon)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Language</label>
+                <select class="form-control">
+                  <option>English</option>
+                  <option>Tamil</option>
+                  <option>Hindi</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">🔒 Privacy & Security</div></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <button class="btn btn-outline w-full" onclick="exportData()">📥 Export My Data</button>
+                <button class="btn btn-ghost w-full" onclick="clearData()">🗑️ Clear All Data</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">ℹ️ About SmartSlip</div></div>
+            <div class="card-body">
+              <div style="text-align:center;">
+                <div style="font-size:3rem;margin-bottom:12px;">💊</div>
+                <h3 style="font-weight:800;margin-bottom:4px;">SmartSlip</h3>
+                <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">Version 2.0 · Your Health, Your Data</p>
+                <p style="font-size:0.82rem;color:var(--text-secondary);">A secure digital platform for managing your complete health information — prescriptions, records, reminders, and emergency access all in one place.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- VOICE ASSISTANT BUTTON (floating) -->
+  <div class="voice-assistant-panel" id="voicePanel">
+    <div class="voice-bubble" id="voiceBubble"></div>
+    <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="AI Voice Assistant">
+      🎙️
+      <div class="voice-status">AI</div>
+    </button>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- Upload Record Modal -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📄 Upload Health Record</div>
+      <button class="modal-close" onclick="closeModal('uploadModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Record Type</label>
+        <select class="form-control" id="uploadType">
+          <option value="report">Medical Report</option>
+          <option value="prescription">Prescription</option>
+          <option value="lab">Lab Test</option>
+          <option value="xray">X-Ray / Scan</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Record Name / Title</label>
+        <input type="text" class="form-control" id="uploadName" placeholder="e.g., Blood Test Results - Jan 2025" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control" id="uploadDate" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Doctor / Hospital</label>
+        <input type="text" class="form-control" id="uploadDoctor" placeholder="Dr. Smith / City Hospital" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-control" id="uploadNotes" placeholder="Any additional notes..." rows="3"></textarea>
+      </div>
+      <div class="upload-zone" style="padding:20px;" onclick="document.getElementById('modalFileInput').click()">
+        <div class="upload-icon" style="font-size:1.8rem;">📂</div>
+        <p><span>Click to attach file</span> (PDF, JPG, PNG)</p>
+        <div id="modalFileName" style="margin-top:8px;font-size:0.82rem;color:var(--primary);font-weight:600;"></div>
+        <input type="file" id="modalFileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png" onchange="document.getElementById('modalFileName').textContent='📎 ' + this.files[0]?.name" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('uploadModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRecord()">💾 Save Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Prescription Modal -->
+<div class="modal-overlay" id="prescriptionModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">💊 Add Prescription</div>
+      <button class="modal-close" onclick="closeModal('prescriptionModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Medication Name</label>
+        <input type="text" class="form-control" id="rxName" placeholder="e.g., Amoxicillin" />
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Dosage</label>
+          <input type="text" class="form-control" id="rxDosage" placeholder="500mg" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Frequency</label>
+          <select class="form-control" id="rxFrequency">
+            <option>Once daily</option>
+            <option>Twice daily</option>
+            <option>Three times daily</option>
+            <option>Every 8 hours</option>
+            <option>Every 6 hours</option>
+            <option>As needed</option>
+            <option>Weekly</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input type="date" class="form-control" id="rxStart" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Date</label>
+          <input type="date" class="form-control" id="rxEnd" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prescribed By</label>
+        <input type="text" class="form-control" id="rxDoctor" placeholder="Dr. Smith" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Instructions</label>
+        <textarea class="form-control" id="rxInstructions" placeholder="Take with food, avoid alcohol..." rows="2"></textarea>
+      </div>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.88rem;">
+          <input type="checkbox" id="rxAddReminder" checked /> Also add to medicine reminders
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('prescriptionModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="savePrescription()">💾 Save Prescription</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Appointment Modal -->
+<div class="modal-overlay" id="appointmentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📅 Book Appointment</div>
+      <button class="modal-close" onclick="closeModal('appointmentModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Doctor Name</label>
+        <input type="text" class="form-control" id="apptDoctor" placeholder="Dr. Smith" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Specialization</label>
+        <select class="form-control" id="apptSpec">
+          <option>General Physician</option>
+          <option>Cardiologist</option>
+          <option>Neurologist</option>
+          <option>Dermatologist</option>
+          <option>Orthopedist</option>
+          <option>Gynecologist</option>
+          <option>Pediatrician</option>
+          <option>Ophthalmologist</option>
+          <option>Dentist</option>
+          <option>Psychiatrist</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-control" id="apptDate" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <input type="time" class="form-control" id="apptTime" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hospital / Clinic</label>
+        <input type="text" class="form-control" id="apptHospital" placeholder="City Medical Center" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Purpose / Notes</label>
+        <textarea class="form-control" id="apptNotes" placeholder="Reason for visit..." rows="2"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('appointmentModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAppointment()">💾 Save Appointment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Reminder Modal -->
+<div class="modal-overlay" id="reminderModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⏰ Add Medicine Reminder</div>
+      <button class="modal-close" onclick="closeModal('reminderModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Medicine Name</label>
+        <input type="text" class="form-control" id="remMed" placeholder="e.g., Metformin" />
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Dosage</label>
+          <input type="text" class="form-control" id="remDose" placeholder="500mg" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reminder Time</label>
+          <input type="time" class="form-control" id="remTime" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Frequency</label>
+        <select class="form-control" id="remFreq">
+          <option value="daily">Every day</option>
+          <option value="alt">Every other day</option>
+          <option value="weekly">Weekly</option>
+          <option value="morning">Morning only</option>
+          <option value="night">Night only</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Color Tag</label>
+        <div style="display:flex;gap:10px;">
+          <div class="color-opt" onclick="selectColor(this,'#2563eb')" style="width:32px;height:32px;border-radius:50%;background:#2563eb;cursor:pointer;border:3px solid #2563eb;"></div>
+          <div class="color-opt" onclick="selectColor(this,'#10b981')" style="width:32px;height:32px;border-radius:50%;background:#10b981;cursor:pointer;"></div>
+          <div class="color-opt" onclick="selectColor(this,'#f59e0b')" style="width:32px;height:32px;border-radius:50%;background:#f59e0b;cursor:pointer;"></div>
+          <div class="color-opt" onclick="selectColor(this,'#ef4444')" style="width:32px;height:32px;border-radius:50%;background:#ef4444;cursor:pointer;"></div>
+          <div class="color-opt" onclick="selectColor(this,'#8b5cf6')" style="width:32px;height:32px;border-radius:50%;background:#8b5cf6;cursor:pointer;"></div>
+        </div>
+        <input type="hidden" id="remColor" value="#2563eb" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('reminderModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReminder()">💾 Save Reminder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Emergency Contact Modal -->
+<div class="modal-overlay" id="emergencyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🚨 Add Emergency Contact</div>
+      <button class="modal-close" onclick="closeModal('emergencyModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="emgName" placeholder="Contact name" />
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Relationship</label>
+          <select class="form-control" id="emgRel">
+            <option>Spouse</option>
+            <option>Parent</option>
+            <option>Child</option>
+            <option>Sibling</option>
+            <option>Friend</option>
+            <option>Doctor</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" id="emgPhone" placeholder="+1 234 567 8900" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email (Optional)</label>
+        <input type="email" class="form-control" id="emgEmail" placeholder="contact@email.com" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('emergencyModal')">Cancel</button>
+      <button class="btn btn-danger" onclick="saveEmergencyContact()">💾 Save Contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- Update Vitals Modal -->
+<div class="modal-overlay" id="vitalsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">❤️ Update Vitals</div>
+      <button class="modal-close" onclick="closeModal('vitalsModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Blood Pressure (mmHg)</label>
+          <input type="text" class="form-control" id="vBP" placeholder="120/80" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Heart Rate (bpm)</label>
+          <input type="number" class="form-control" id="vHR" placeholder="72" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Temperature (°F)</label>
+          <input type="number" step="0.1" class="form-control" id="vTemp" placeholder="98.6" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">SpO2 (%)</label>
+          <input type="number" class="form-control" id="vSpo2" placeholder="98" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Blood Sugar (mg/dL)</label>
+          <input type="number" class="form-control" id="vSugar" placeholder="90" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weight (kg)</label>
+          <input type="number" step="0.1" class="form-control" id="vWeight" placeholder="70" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('vitalsModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveVitals()">💾 Save Vitals</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal-overlay" id="editProfileModal">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Profile</div>
+      <button class="modal-close" onclick="closeModal('editProfileModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-control" id="epFirstName" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="epLastName" />
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" class="form-control" id="epDob" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <select class="form-control" id="epGender">
+            <option>Male</option><option>Female</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input type="tel" class="form-control" id="epPhone" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Blood Type</label>
+          <select class="form-control" id="epBlood">
+            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Address</label>
+        <input type="text" class="form-control" id="epAddress" placeholder="City, State, Country" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Allergies (comma separated)</label>
+        <input type="text" class="form-control" id="epAllergies" placeholder="Penicillin, Peanuts, Dust..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Medical Conditions (comma separated)</label>
+        <input type="text" class="form-control" id="epConditions" placeholder="Diabetes, Hypertension..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Height (cm)</label>
+        <input type="number" class="form-control" id="epHeight" placeholder="170" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('editProfileModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- QR Code Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<!-- jsQR for scanning -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+
+<!-- App Scripts -->
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/records.js"></script>
+<script src="js/prescriptions.js"></script>
+<script src="js/appointments.js"></script>
+<script src="js/reminders.js"></script>
+<script src="js/emergency.js"></script>
+<script src="js/qrcode.js"></script>
+<script src="js/scanner.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/vitals.js"></script>
+<script src="js/profile.js"></script>
+
+</body>
+</html>
